@@ -86,9 +86,12 @@ export function HomeScreen({ navigation }) {
   const onSubmitLogin = async () => {
     try {
       setIsLoggingIn(true);
-      let fcmToken = await getAndSetFCMToken();
-      let user = await loginUser(formData?.email, formData?.password)
-      const realm = await getRealm(user);
+      //let fcmToken = await getAndSetFCMToken();
+      let user = await loginUser(formData?.email, formData?.password);
+      console.log(user);
+      const realm = await getRealm(user,'master');
+      console.log(realm)
+      console.log("REALM CHECK " + realm.empty);
       setData({});
       dispatch(setRealmConnection(realm));
       dispatch(setRealmUserEmail(formData?.email));

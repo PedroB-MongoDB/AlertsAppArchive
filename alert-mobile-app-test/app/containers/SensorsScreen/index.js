@@ -4,6 +4,7 @@
  *
  */
 
+ import Realm from "realm";
 import { setRealmConnection } from 'containers/HomeScreen/actions';
 import { Box, Center, HStack, Image, Skeleton, Text, VStack } from 'native-base';
 import PropTypes from 'prop-types';
@@ -69,10 +70,9 @@ export function SensorsScreen({
   }, []);
 
   async function getSensorsFromRealm() {
-    setSensors([])
+    setSensors([]);
     setIsLoadingSensors(true);
-    let sensors = realmConnection
-      .objects("sensorData")
+    let sensors = realmConnection.objects("sensorData");
     setSensors(sensors);
     dispatch(setLoading(false))
     setIsLoadingSensors(false);
@@ -96,8 +96,9 @@ export function SensorsScreen({
   }
 
   useEffect(async () => {
-    realmConnection.addListener("change", onRealmChange);
     setSensors([])
+    console.log("Sensor Screen" + realmConnection.constructor.name);
+    realmConnection.addListener('change', onRealmChange);
     navigation.addListener('focus', async () => {
       await getSensorsFromRealm();
     });

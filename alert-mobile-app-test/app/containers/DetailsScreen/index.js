@@ -91,9 +91,7 @@ export function DetailsScreen(props) {
       let userId = await AsyncStorage.getItem('userId');
       dispatch(setLoading(true))
       realmConnection.write(() => {
-        let sensorFromRealm = realmConnection
-          .objects("sensorData")
-          .filtered('_id = $0', ObjectID(sensor?._id))
+        let sensorFromRealm = realmConnection.objects("sensorData").filtered('_id = $0', ObjectID(sensor?._id))
         sensorFromRealm[0].notes = notes ?? '';
         sensorFromRealm[0].acknowledged = true;
         sensorFromRealm[0].acknowledgedBy = userId;
