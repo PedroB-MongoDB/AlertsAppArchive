@@ -22,7 +22,6 @@ let Eye = require('app/images/eye.png');
 let Eyex = require('app/images/eyex.png');
 
 const HomeScreen = ({ navigation }) => {
-
   const dispatch = useDispatch();
   const user = useSelector(state => state?.home?.user);
   const [formData, setData] = React.useState({
@@ -234,16 +233,3 @@ const HomeScreen = ({ navigation }) => {
 };
 
 export default HomeScreen;
-// HomeScreen.propTypes = {
-//   navigation: PropTypes.object,
-// };
-
-// const mapStateToProps = createStructuredSelector({
-// });
-
-// export function mapDispatchToProps(dispatch) {
-//   return {};
-// }
-// const withConnect = connect(mapStateToProps, mapDispatchToProps);
-
-// export default compose(withConnect, memo)(HomeScreen);

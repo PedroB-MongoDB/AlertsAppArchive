@@ -8,7 +8,7 @@ import { realmConnection, logoutUser } from 'containers/HomeScreen/actions';
 import { Box, Center, HStack, Image, Skeleton, Text, VStack } from 'native-base';
 import PropTypes from 'prop-types';
 import React, { useEffect, useLayoutEffect } from 'react';
-import { Alert, BackHandler, Pressable, RefreshControl, SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
+import { Pressable, RefreshControl, SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { getDate, getSensorImage, getStatus, getType } from '../../utils/helper';
 import { getSensors } from './actions';
@@ -64,7 +64,6 @@ export const SensorsScreen = ({ navigation }) => {
     initiate();
   }, [user, primaryRealm, sensors]);
 
-
   const initiate = () => {
     if (user != null && primaryRealm == null) {
       dispatch(realmConnection(user));
@@ -75,7 +74,7 @@ export const SensorsScreen = ({ navigation }) => {
     if (sensors?.length > 0) {
       setIsLoadingSensors(false);
     }
-  }
+  };
   const onPressSensorFromList = sensor => {
     navigation.navigate('Details', { sensor });
   };

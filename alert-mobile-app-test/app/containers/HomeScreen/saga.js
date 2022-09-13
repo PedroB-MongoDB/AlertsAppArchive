@@ -12,8 +12,7 @@ function* loginUserSaga({ payload }) {
   }
 }
 
-
-function* logoutUserSaga({ }) {
+function* logoutUserSaga({}) {
   try {
     messaging().deleteToken();
     AsyncStorage.clear();

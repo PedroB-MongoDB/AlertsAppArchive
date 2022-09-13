@@ -3,7 +3,7 @@ import produce from 'immer';
 export const initialState = {
   user: null,
   primaryRealm: null,
-  loggedOut: null
+  loggedOut: null,
 };
 
 /* eslint-disable default-case, no-param-reassign */
