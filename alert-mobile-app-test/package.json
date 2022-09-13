@@ -1,5 +1,5 @@
 {
-  "name": "SmartFactory",
+  "name": "smartfactory",
   "version": "0.0.1",
   "description": "SmartFactory",
   "repository": {
@@ -21,8 +21,8 @@
   "dependencies": {
     "@babel/polyfill": "^7.7.0",
     "@react-native-async-storage/async-storage": "^1.15.17",
-    "@react-native-community/masked-view": "^0.1.11",
-    "@react-native-community/picker": "^1.8.1",
+    "@react-native-masked-view/masked-view": "^0.2.7",
+    "@react-native-picker/picker": "^2.4.4",
     "@react-native-firebase/app": "^14.3.0",
     "@react-native-firebase/messaging": "^14.3.0",
     "@react-navigation/native": "^6.0.7",
@@ -31,8 +31,6 @@
     "bson-objectid": "^2.0.2",
     "hoist-non-react-statics": "3.3.2",
     "immer": "^9.0.12",
-    "intl": "^1.2.5",
-    "invariant": "^2.2.4",
     "moment": "^2.29.1",
     "native-base": "^3.3.4",
     "prop-types": "^15.8.1",
@@ -57,7 +55,6 @@
     "@babel/runtime": "^7.16.7",
     "babel-jest": "27.4.6",
     "babel-plugin-module-resolver": "^4.1.0",
-    "babel-plugin-react-intl": "^5.1.8",
     "chalk": "^5.0.0",
     "compare-versions": "4.1.3",
     "cross-env": "7.0.3",
