@@ -1,6 +1,6 @@
 {
-  "name": "SmartFactory",
-  "version": "0.0.1",
+  "name": "smartfactory",
+  "version": "0.1.1",
   "description": "SmartFactory",
   "repository": {
     "type": "git"
@@ -38,7 +38,7 @@
     "prop-types": "^15.8.1",
     "react": "17.0.2",
     "react-intl": "5.24.4",
-    "react-native": "0.67.2",
+    "react-native": "^0.70.0",
     "react-native-gesture-handler": "^2.2.0",
     "react-native-input-scroll-view": "^1.11.0",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",

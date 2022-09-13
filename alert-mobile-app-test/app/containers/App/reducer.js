@@ -1,7 +1,6 @@
 import produce from 'immer';
 
-export const initialState = {
-};
+export const initialState = {};
 
 const appReducer = (state = initialState, action) =>
   produce(state, draft => {

@@ -1,7 +1,7 @@
 export function getSensors(realm) {
   return {
     type: 'GET_SENSORS_REQUEST',
-    payload: { realm }
+    payload: { realm },
   };
 }
 

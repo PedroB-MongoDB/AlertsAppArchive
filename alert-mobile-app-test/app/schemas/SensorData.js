@@ -2,7 +2,7 @@ export const Sensors = {
   name: 'sensors',
   properties: {
     _id: 'objectId',
-    data: "data?",
+    data: 'data?',
     acknowledged: 'bool?',
     acknowledgedBy: 'string?',
     code: 'int?',

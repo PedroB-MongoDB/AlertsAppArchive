@@ -1,1 +1,1 @@
-export const REALM_APP_ID = 'iiotflex-mazbu';
+export const REALM_APP_ID = 'alert-mobile-app-hoijw';

@@ -11,7 +11,7 @@ import produce from 'immer';
 
 // The initial state of the App
 export const initialState = {
-  sensors: []
+  sensors: [],
 };
 
 /* eslint-disable default-case, no-param-reassign */
@@ -23,7 +23,7 @@ const sensorReducer = (state = initialState, action) =>
       case 'GET_SENSORS':
         draft.sensors = action.response;
         break;
-      case "GET_SENSORS_REQUEST":
+      case 'GET_SENSORS_REQUEST':
         return {
           ...state,
         };

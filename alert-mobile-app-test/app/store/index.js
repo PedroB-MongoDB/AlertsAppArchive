@@ -7,10 +7,7 @@ import { createReducer } from './reducers';
 const sagaMiddleware = createSagaMiddleware();
 const middlewares = [sagaMiddleware];
 
-const store = createStore(
-  createReducer,
-  applyMiddleware(...middlewares),
-);
+const store = createStore(createReducer, applyMiddleware(...middlewares));
 
 sagaMiddleware.run(rootSaga);
 

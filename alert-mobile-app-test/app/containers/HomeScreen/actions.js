@@ -7,13 +7,13 @@
 export function loginUser(email, password) {
   return {
     type: 'LOGIN_REQUEST',
-    payload: { email, password }
-  }
+    payload: { email, password },
+  };
 }
 
 export function realmConnection(realmUser) {
   return {
     type: 'REALM_CONNECTION_REQUEST',
-    payload: { realmUser }
-  }
+    payload: { realmUser },
+  };
 }

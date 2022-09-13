@@ -9,7 +9,7 @@ export const initialState = {
 const homeReducer = (state = initialState, action) =>
   produce(state, draft => {
     switch (action.type) {
-      case "LOGIN_REQUEST":
+      case 'LOGIN_REQUEST':
         return {
           ...state,
         };
@@ -17,7 +17,7 @@ const homeReducer = (state = initialState, action) =>
         draft.user = action.response;
         break;
       case 'REALM_CONNECTION':
-        draft.primaryRealm = action.response
+        draft.primaryRealm = action.response;
         break;
     }
   });
