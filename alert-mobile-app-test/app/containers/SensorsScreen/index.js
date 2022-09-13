@@ -4,40 +4,43 @@
  *
  */
 
- import Realm from "realm";
-import { setRealmConnection } from 'containers/HomeScreen/actions';
+import { logout } from 'containers/DetailsScreen/actions';
+import { realmConnection } from 'containers/HomeScreen/actions';
 import { Box, Center, HStack, Image, Skeleton, Text, VStack } from 'native-base';
 import PropTypes from 'prop-types';
-import React, { memo, useEffect, useLayoutEffect } from 'react';
+import React, { useEffect, useLayoutEffect } from 'react';
 import {
   Alert, BackHandler, Pressable, RefreshControl, SafeAreaView, ScrollView, StyleSheet,
   View
 } from 'react-native';
-import { connect, useDispatch, useSelector } from 'react-redux';
-import { compose } from 'redux';
-import { createStructuredSelector } from 'reselect';
+import { useDispatch, useSelector } from 'react-redux';
 import { getDate, getSensorImage, getStatus, getType, logoutUser } from '../../utils/helper';
-import { logout } from 'containers/DetailsScreen/actions';
-import { setLoading } from './actions';
+import { getSensors } from "./actions";
+
 let Calander = require('app/images/calendar.png');
 let List = require('app/images/list.png');
 let Loader = require('app/images/loader.png');
 let Power = require('app/images/power.png');
 
-export function SensorsScreen({
+export const SensorsScreen = ({
   navigation,
-}) {
-  const realmConnection = useSelector(state => state?.global?.realmConnection)
+}) => {
+  const sensors = useSelector(state => state?.sensors?.sensors)
+  const user = useSelector(state => state?.home?.user)
+  const primaryRealm = useSelector(state => state?.home?.primaryRealm)
   const isLoading = useSelector(state => state?.global?.isLoading ?? true)
-  const [sensors, setSensors] = React.useState([]);
   const [refreshing, setRefreshing] = React.useState(false);
   const [isLoadingSensors, setIsLoadingSensors] = React.useState(isLoading);
   const dispatch = useDispatch();
+
+
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
-    await getSensorsFromRealm();
+    if (primaryRealm != null) {
+      dispatch(getSensors(primaryRealm));
+    }
     setRefreshing(false);
-  }, []);
+  }, [primaryRealm]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -69,16 +72,6 @@ export function SensorsScreen({
     });
   }, []);
 
-  async function getSensorsFromRealm() {
-    setSensors([]);
-    setIsLoadingSensors(true);
-    let sensors = realmConnection.objects("sensorData");
-    setSensors(sensors);
-    dispatch(setLoading(false))
-    setIsLoadingSensors(false);
-    dispatch(setRealmConnection(realmConnection));
-  }
-
   const backAction = () => {
     Alert.alert("Hang on!", "Are you sure you want to exit?", [
       {
@@ -91,26 +84,36 @@ export function SensorsScreen({
     return true;
   };
 
-  const onRealmChange = async () => {
-    await getSensorsFromRealm();
-  }
-
   useEffect(async () => {
-    setSensors([])
-    console.log("Sensor Screen" + realmConnection.constructor.name);
-    realmConnection.addListener('change', onRealmChange);
-    navigation.addListener('focus', async () => {
-      await getSensorsFromRealm();
-    });
     BackHandler.addEventListener('hardwareBackPress', backAction);
     return () => {
       BackHandler.removeEventListener('hardwareBackPress', backAction);
     };
   }, []);
 
+  useEffect(() => {
+    if (user != null && primaryRealm == null) {
+      dispatch(realmConnection(user));
+    }
+    if (primaryRealm != null && sensors?.length == 0) {
+      dispatch(getSensors(primaryRealm));
+    }
+    if (sensors?.length > 0) {
+      // sensors.addListener(async () => {
+      //   await sensorsListener();
+      // });
+      setIsLoadingSensors(false)
+    }
+  }, [user, primaryRealm, sensors])
+
   const onPressSensorFromList = (sensor) => {
     navigation.navigate('Details', { sensor })
   };
+
+
+  // const sensorsListener = async () => {
+  //   dispatch(getSensors(primaryRealm));
+  // }
 
   return (
     <SafeAreaView>
@@ -241,14 +244,4 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = createStructuredSelector({
-});
-
-export function mapDispatchToProps(dispatch) {
-  return {
-  };
-}
-
-const withConnect = connect(mapStateToProps, mapDispatchToProps);
-
-export default compose(withConnect, memo)(SensorsScreen);
+export default SensorsScreen;

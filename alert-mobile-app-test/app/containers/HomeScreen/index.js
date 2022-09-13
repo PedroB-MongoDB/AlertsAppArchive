@@ -4,20 +4,16 @@
  *
  */
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Box, Button, Center, FormControl, Heading, HStack, Image, Input, Text, VStack } from 'native-base';
-import PropTypes from 'prop-types';
-import React, { memo, useEffect, useLayoutEffect, useRef } from 'react';
+import React, { useEffect, useLayoutEffect, useRef } from 'react';
 import { Alert, BackHandler, Pressable, ScrollView, View } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import InputScrollView from 'react-native-input-scroll-view';
-import { connect, useDispatch } from 'react-redux';
-import { compose } from 'redux';
-import { createStructuredSelector } from 'reselect';
-import { getAndSetFCMToken } from 'utils/firebase';
+import { useDispatch, useSelector } from 'react-redux';
 import { validateEmail } from 'utils/helper';
-import { getRealm, loginUser } from 'utils/realm';
-import { setRealmConnection, setRealmUserEmail } from './actions';
+import { loginUser } from './actions';
 import styles from './styles';
+import { getAndSetFCMToken } from 'utils/firebase';
 
 let PMongo = require('app/images/pmongo.png');
 let LoginHeader = require('app/images/loginheader.png');
@@ -25,13 +21,17 @@ let Wekan = require('app/images/wekan.png');
 let Eye = require('app/images/eye.png');
 let Eyex = require('app/images/eyex.png');
 
-export function HomeScreen({ navigation }) {
+const HomeScreen = ({ navigation }) => {
 
   const dispatch = useDispatch();
-  const [formData, setData] = React.useState({});
+  const user = useSelector(state => state?.home?.user)
+  const [formData, setData] = React.useState({
+    email: 'ashwins@wekancode.com',
+    password: "Achu6577"
+  });
   const [showPassword, setShowPassword] = React.useState(false);
   const [isLoggingIn, setIsLoggingIn] = React.useState(false);
-  const [isLoginButtonDisabled, setIsLoginButtonDisabled] = React.useState(true);
+  const [isLoginButtonDisabled, setIsLoginButtonDisabled] = React.useState(false);
   const [errors, setErrors] = React.useState({
     err: null
   });
@@ -48,15 +48,6 @@ export function HomeScreen({ navigation }) {
     return true;
   };
   useEffect(() => {
-    async function checkLoggedIn() {
-      let userEmail = await AsyncStorage.getItem('userEmail')
-      if (userEmail != null) {
-        navigation.navigate('Sensors');
-      } else {
-        navigation.navigate('Home');
-      }
-    }
-    checkLoggedIn()
     BackHandler.addEventListener('hardwareBackPress', backAction);
     return () => {
       BackHandler.removeEventListener('hardwareBackPress', backAction);
@@ -86,18 +77,10 @@ export function HomeScreen({ navigation }) {
   const onSubmitLogin = async () => {
     try {
       setIsLoggingIn(true);
-      //let fcmToken = await getAndSetFCMToken();
-      let user = await loginUser(formData?.email, formData?.password);
-      console.log(user);
-      const realm = await getRealm(user,'master');
-      console.log(realm)
-      console.log("REALM CHECK " + realm.empty);
-      setData({});
-      dispatch(setRealmConnection(realm));
-      dispatch(setRealmUserEmail(formData?.email));
-      await AsyncStorage.setItem('userEmail', formData?.email)
-      await AsyncStorage.setItem('userId', user?.id)
-      setIsLoggingIn(false);
+      let fcmToken = await getAndSetFCMToken();
+      await AsyncStorage.setItem('fcmToken', fcmToken)
+      dispatch(loginUser(formData?.email, formData?.password))
+      setIsLoggingIn(false)
       navigation.navigate('Sensors');
     } catch (error) {
       console.log('error: ', error);
@@ -233,17 +216,18 @@ export function HomeScreen({ navigation }) {
   );
 }
 
-HomeScreen.propTypes = {
-  navigation: PropTypes.object,
-};
+export default HomeScreen;
+// HomeScreen.propTypes = {
+//   navigation: PropTypes.object,
+// };
 
-const mapStateToProps = createStructuredSelector({
-});
+// const mapStateToProps = createStructuredSelector({
+// });
 
 
-export function mapDispatchToProps(dispatch) {
-  return {};
-}
-const withConnect = connect(mapStateToProps, mapDispatchToProps);
+// export function mapDispatchToProps(dispatch) {
+//   return {};
+// }
+// const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
-export default compose(withConnect, memo)(HomeScreen);
+// export default compose(withConnect, memo)(HomeScreen);

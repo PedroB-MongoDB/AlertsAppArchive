@@ -4,18 +4,14 @@
  *
  */
 
-import { setLoading } from 'containers/SensorsScreen/actions';
-import { Button, Divider, HStack, Image, Input, Text, VStack, TextArea } from 'native-base';
-import PropTypes from 'prop-types';
-import React, { memo, useEffect, useLayoutEffect, useRef } from 'react';
+import { logout } from 'containers/DetailsScreen/actions';
+import { getSensors, setLoading } from 'containers/SensorsScreen/actions';
+import { Button, Divider, HStack, Image, Text, TextArea, VStack } from 'native-base';
+import React, { useEffect, useLayoutEffect, useRef } from 'react';
 import { BackHandler, ScrollView, View } from 'react-native';
 import InputScrollView from 'react-native-input-scroll-view';
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
-import { connect, useDispatch, useSelector } from 'react-redux';
-import { logout } from 'containers/DetailsScreen/actions';
-import { compose } from 'redux';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { createStructuredSelector } from 'reselect';
+import { useDispatch, useSelector } from 'react-redux';
 import { getSensorImage, getStatus, getType, logoutUser } from '../../utils/helper';
 
 let Alert = require('app/images/alert.png');
@@ -23,12 +19,14 @@ let ImagePlaceholder = require('app/images/image.png');
 let Power = require('app/images/power.png');
 let LeftIcon = require('app/images/chevron-left.png');
 var ObjectID = require("bson-objectid");
-export function DetailsScreen(props) {
+const DetailsScreen = (props) => {
   const { navigation } = props;
   const dispatch = useDispatch();
+
+  const primaryRealm = useSelector(state => state?.home?.primaryRealm);
+  const user = useSelector(state => state?.home?.user);
   const [sensor, setSensor] = React.useState(props?.route?.params?.sensor ?? {});
   const [notes, setNotes] = React.useState(sensor?.notes ?? '')
-  const realmConnection = useSelector(state => state?.global?.realmConnection)
   const [isAcknowledging, setIsAcknowledging] = React.useState(false);
   const isAcknowledgeButtonRef = useRef();
 
@@ -88,15 +86,15 @@ export function DetailsScreen(props) {
       setIsAcknowledging(false);
       return navigation.navigate('Sensors')
     } else {
-      let userId = await AsyncStorage.getItem('userId');
       dispatch(setLoading(true))
-      realmConnection.write(() => {
-        let sensorFromRealm = realmConnection.objects("sensorData").filtered('_id = $0', ObjectID(sensor?._id))
+      primaryRealm.write(() => {
+        let sensorFromRealm = primaryRealm.objects("sensors").filtered('_id = $0', ObjectID(sensor?._id))
         sensorFromRealm[0].notes = notes ?? '';
         sensorFromRealm[0].acknowledged = true;
-        sensorFromRealm[0].acknowledgedBy = userId;
+        sensorFromRealm[0].acknowledgedBy = user?.id;
         setSensor(sensorFromRealm[0]);
         setIsAcknowledging(false);
+        dispatch(getSensors(primaryRealm));
       });
     }
   };
@@ -177,20 +175,4 @@ export function DetailsScreen(props) {
   );
 }
 
-DetailsScreen.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-};
-
-
-const mapStateToProps = createStructuredSelector({
-});
-
-function mapDispatchToProps(dispatch) {
-  return {
-    dispatch,
-  };
-}
-
-const withConnect = connect(mapStateToProps, mapDispatchToProps);
-
-export default compose(withConnect, memo)(DetailsScreen);
+export default DetailsScreen;

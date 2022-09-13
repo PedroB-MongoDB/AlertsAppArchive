@@ -4,30 +4,16 @@
  *
  */
 
-export function actionLoginUser(user) {
+export function loginUser(email, password) {
   return {
-    type: 'LOGIN_USER',
-    user
+    type: 'LOGIN_REQUEST',
+    payload: { email, password }
   }
 }
 
-export function setRealmConnection(realmConnection) {
+export function realmConnection(realmUser) {
   return {
-    type: 'REALM_CONNECTION',
-    realmConnection
-  }
-}
-
-export function setRealmUserId(realmUserId) {
-  return {
-    type: 'REALM_USER_ID',
-    realmUserId
-  }
-}
-
-export function setRealmUserEmail(realmUserEmail) {
-  return {
-    type: 'REALM_USER_EMIAL',
-    realmUserEmail
+    type: 'REALM_CONNECTION_REQUEST',
+    payload: { realmUser }
   }
 }

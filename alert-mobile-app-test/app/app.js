@@ -7,18 +7,16 @@ import React from 'react';
 import { LogBox, YellowBox } from "react-native";
 import 'react-native-gesture-handler';
 import { Provider } from 'react-redux';
-import configureStore from './configureStore';
+import { store } from 'app/store';
 
-const initialState = {};
-const store = configureStore(initialState);
 LogBox.ignoreAllLogs(true)
-YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader', 'RNDeviceInfo', 'Warning: An update']);
+YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader', 'RNDeviceInfo', 'Warning: An update', 'RCTView', 'View', 'http']);
 
 const render = () => (
   <Provider store={store}>
     <App />
   </Provider>
-  
+
 );
 
 export default render;
