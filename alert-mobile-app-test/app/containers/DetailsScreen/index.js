@@ -4,7 +4,6 @@
  *
  */
 
-import { logout } from 'containers/DetailsScreen/actions';
 import { getSensors, setLoading } from 'containers/SensorsScreen/actions';
 import { Button, Divider, HStack, Image, Text, TextArea, VStack } from 'native-base';
 import React, { useEffect, useLayoutEffect, useRef } from 'react';
@@ -12,19 +11,23 @@ import { BackHandler, ScrollView, View } from 'react-native';
 import InputScrollView from 'react-native-input-scroll-view';
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
 import { useDispatch, useSelector } from 'react-redux';
-import { getSensorImage, getStatus, getType, logoutUser } from '../../utils/helper';
+import { logoutUser } from 'containers/HomeScreen/actions';
+import { getSensorImage, getStatus, getType } from '../../utils/helper';
 
 let Alert = require('app/images/alert.png');
 let ImagePlaceholder = require('app/images/image.png');
 let Power = require('app/images/power.png');
 let LeftIcon = require('app/images/chevron-left.png');
 var ObjectID = require('bson-objectid');
+
+
 const DetailsScreen = props => {
   const { navigation } = props;
   const dispatch = useDispatch();
 
   const primaryRealm = useSelector(state => state?.home?.primaryRealm);
   const user = useSelector(state => state?.home?.user);
+  const loggedOut = useSelector(state => state?.home?.loggedOut);
   const [sensor, setSensor] = React.useState(props?.route?.params?.sensor ?? {});
   const [notes, setNotes] = React.useState(sensor?.notes ?? '');
   const [isAcknowledging, setIsAcknowledging] = React.useState(false);
@@ -35,12 +38,17 @@ const DetailsScreen = props => {
     return true;
   };
 
-  useEffect(() => {
-    BackHandler.addEventListener('hardwareBackPress', backAction);
-    return () => {
-      BackHandler.removeEventListener('hardwareBackPress', backAction);
-    };
-  }, []);
+  // useEffect(() => {
+  //   // console.log('loggedOut:1111 ', loggedOut);
+  //   // if (loggedOut) {
+  //   //   console.log('loggedOut: ', loggedOut);
+  //   //   return navigation.navigate('Splash');
+  //   // }
+  //   BackHandler.addEventListener('hardwareBackPress', backAction);
+  //   return () => {
+  //     BackHandler.removeEventListener('hardwareBackPress', backAction);
+  //   };
+  // }, []);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -54,9 +62,9 @@ const DetailsScreen = props => {
       ),
       headerRight: () => (
         <Pressable
-          onPress={async () => {
-            dispatch(logout());
-            logoutUser(navigation);
+          onPress={() => {
+            dispatch(logoutUser(navigation));
+            navigation.navigate('Home')
           }}
         >
           <Image alt="Img" size={6} marginRight={3} source={Power} />

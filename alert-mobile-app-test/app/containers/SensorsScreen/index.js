@@ -4,14 +4,13 @@
  *
  */
 
-import { logout } from 'containers/DetailsScreen/actions';
-import { realmConnection } from 'containers/HomeScreen/actions';
+import { realmConnection, logoutUser } from 'containers/HomeScreen/actions';
 import { Box, Center, HStack, Image, Skeleton, Text, VStack } from 'native-base';
 import PropTypes from 'prop-types';
 import React, { useEffect, useLayoutEffect } from 'react';
 import { Alert, BackHandler, Pressable, RefreshControl, SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { getDate, getSensorImage, getStatus, getType, logoutUser } from '../../utils/helper';
+import { getDate, getSensorImage, getStatus, getType } from '../../utils/helper';
 import { getSensors } from './actions';
 
 let Calander = require('app/images/calendar.png');
@@ -49,8 +48,8 @@ export const SensorsScreen = ({ navigation }) => {
       headerRight: () => (
         <Pressable
           onPress={async () => {
-            dispatch(logout());
-            logoutUser(navigation);
+            dispatch(logoutUser());
+            navigation.navigate('Home');
           }}
         >
           <Image alt="Img" size={6} marginRight={3} source={Power} />
@@ -61,26 +60,12 @@ export const SensorsScreen = ({ navigation }) => {
     });
   }, []);
 
-  const backAction = () => {
-    Alert.alert('Hang on!', 'Are you sure you want to exit?', [
-      {
-        text: 'Cancel',
-        onPress: () => null,
-        style: 'cancel',
-      },
-      { text: 'YES', onPress: () => BackHandler.exitApp() },
-    ]);
-    return true;
-  };
-
-  useEffect(async () => {
-    BackHandler.addEventListener('hardwareBackPress', backAction);
-    return () => {
-      BackHandler.removeEventListener('hardwareBackPress', backAction);
-    };
-  }, []);
-
   useEffect(() => {
+    initiate();
+  }, [user, primaryRealm, sensors]);
+
+
+  const initiate = () => {
     if (user != null && primaryRealm == null) {
       dispatch(realmConnection(user));
     }
@@ -90,8 +75,7 @@ export const SensorsScreen = ({ navigation }) => {
     if (sensors?.length > 0) {
       setIsLoadingSensors(false);
     }
-  }, [user, primaryRealm, sensors]);
-
+  }
   const onPressSensorFromList = sensor => {
     navigation.navigate('Details', { sensor });
   };

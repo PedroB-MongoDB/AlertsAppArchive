@@ -22,6 +22,7 @@ let Eye = require('app/images/eye.png');
 let Eyex = require('app/images/eyex.png');
 
 const HomeScreen = ({ navigation }) => {
+
   const dispatch = useDispatch();
   const user = useSelector(state => state?.home?.user);
   const [formData, setData] = React.useState({

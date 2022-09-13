@@ -1,7 +1,5 @@
 import { Buffer } from 'buffer';
 import moment from 'moment';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import messaging from '@react-native-firebase/messaging';
 
 function getDate(date) {
   return moment.utc(date).format('DD / MM / YY');
@@ -56,10 +54,4 @@ function getSensorImage(data) {
   return `data:image/png;base64,${btoa(binary)}`;
 }
 
-const logoutUser = async navigation => {
-  messaging().deleteToken();
-  await AsyncStorage.clear();
-  navigation.navigate('Home');
-};
-
-export { getDate, getSensorImage, getStatus, getType, validateEmail, logoutUser };
+export { getDate, getSensorImage, getStatus, getType, validateEmail };
