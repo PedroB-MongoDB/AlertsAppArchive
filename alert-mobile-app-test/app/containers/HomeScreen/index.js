@@ -9,7 +9,7 @@ import React, { useEffect, useLayoutEffect, useRef } from 'react';
 import { Alert, BackHandler, Pressable, ScrollView, View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import InputScrollView from 'react-native-input-scroll-view';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { validateEmail } from 'utils/helper';
 import { loginUser } from './actions';
 import styles from './styles';
@@ -23,11 +23,7 @@ let Eyex = require('app/images/eyex.png');
 
 const HomeScreen = ({ navigation }) => {
   const dispatch = useDispatch();
-  const user = useSelector(state => state?.home?.user);
-  const [formData, setData] = React.useState({
-    email: 'ashwins@wekancode.com',
-    password: 'Achu6577',
-  });
+  const [formData, setData] = React.useState({});
   const [showPassword, setShowPassword] = React.useState(false);
   const [isLoggingIn, setIsLoggingIn] = React.useState(false);
   const [isLoginButtonDisabled, setIsLoginButtonDisabled] = React.useState(false);
