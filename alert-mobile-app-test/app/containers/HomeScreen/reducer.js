@@ -1,23 +1,29 @@
-/*
- *
- * HomeScreen reducer
- *
- */
 import produce from 'immer';
 
 export const initialState = {
+  user: null,
+  primaryRealm: null,
+  loggedOut: null,
 };
 
 /* eslint-disable default-case, no-param-reassign */
-const homeScreenReducer = (state = initialState, action) =>
+const homeReducer = (state = initialState, action) =>
   produce(state, draft => {
     switch (action.type) {
-      case 'LOGIN_USER':
+      case 'LOGIN_REQUEST':
         return {
-          user: action.user
+          ...state,
         };
+      case 'LOGIN_USER':
+        draft.user = action.response;
+        break;
+      case 'LOGOUT_USER':
+        draft.loggedOut = true;
+        break;
+      case 'REALM_CONNECTION':
+        draft.primaryRealm = action.response;
+        break;
     }
-
   });
 
-export default homeScreenReducer;
+export default homeReducer;

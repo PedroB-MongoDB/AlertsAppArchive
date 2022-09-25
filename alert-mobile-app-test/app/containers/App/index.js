@@ -21,7 +21,7 @@ const Stack = createStackNavigator();
 export default function App() {
   return (
     <NativeBaseProvider>
-      <StatusBar backgroundColor='#053333' />
+      <StatusBar backgroundColor="#053333" />
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Splash">
           <Stack.Screen name="Splash" options={{ headerShown: false }} component={SplashScreen} />
@@ -31,6 +31,5 @@ export default function App() {
         </Stack.Navigator>
       </NavigationContainer>
     </NativeBaseProvider>
-
   );
 }

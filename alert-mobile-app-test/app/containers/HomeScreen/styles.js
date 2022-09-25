@@ -10,10 +10,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     resizeMode: 'cover', // make sure background covers all of screen
   },
-  cover: {
-  },
+  cover: {},
   close: {
-    position: "absolute",
+    position: 'absolute',
     zIndex: 0,
     top: 90,
     left: 40,
@@ -42,11 +41,11 @@ const styles = StyleSheet.create({
   },
   logo: {
     width: 52,
-    height: 52
+    height: 52,
   },
   backdrop: {
     flex: 1,
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
 
   scrollView: {
